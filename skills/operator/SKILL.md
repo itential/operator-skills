@@ -6,7 +6,7 @@ argument-hint: "[action or workflow-name]"
 
 # Itential Operator — Run, Monitor and Fix Automations
 
-This skill is for **operating** the Itential Platform: finding and running automations, monitoring jobs, handling manual tasks, managing triggers, and responding to failures. To build or change workflows, use Itential's builder skills (`itential-builder` plugin, e.g. `builder-agent`).
+This skill is for **operating** the Itential Platform: finding and running automations, monitoring jobs, handling manual tasks, managing triggers, and responding to failures. To build or change workflows — or to test and sign off a delivery, which Itential's builder skills do by running jobs themselves — use the builder skills (`itential-builder` plugin: `builder-agent`, `qa-agent`). Platform health, adapters and access are Itential's admin skills (`itential-admin-skills`).
 
 ## Org, team & personal rules
 

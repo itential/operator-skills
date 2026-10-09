@@ -20,6 +20,18 @@ This project contains skills for operating the Itential Platform. The operator p
 |-------|------|-------------|
 | `/operator` | **Operations** | Find and run automations, monitor jobs, diagnose and retry failures, approve manual tasks, manage endpoint/manual/scheduled triggers. |
 
+## Other Itential skill packs
+
+| Pack | Repo | Plugin | For |
+|---|---|---|---|
+| **Builder** | [`itential/builder-skills`](https://github.com/itential/builder-skills) | `itential-builder` | Design, build and test automations — spec, feasibility, design, build, QA and as-built |
+| **Admin** | [`itential/admin-skills`](https://github.com/itential/admin-skills) | `itential-admin-skills` | Platform health, adapters and applications, users, groups, roles, service accounts, SSO, integrations |
+| **Operator** (this repo) | [`itential/operator-skills`](https://github.com/itential/operator-skills) | `itential-operator-skills` | Run automations, monitor jobs, diagnose and retry failures, approve manual tasks, manage triggers |
+
+**Where the line is.** This pack runs automations that are already delivered: starting jobs, watching them, retrying failures, approving manual tasks, managing triggers. Building or changing workflows — and testing or certifying a delivery, which Builder's `qa-agent` does by running jobs itself — → **Builder**; platform health, adapters, users and access → **Admin**.
+
+If a request belongs to another pack, say which pack covers it and how to install it (`/plugin marketplace add <repo>` then `/plugin install <plugin>@<plugin>` in Claude Code; other tools in `docs/vendor-install.md`), rather than improvising from general knowledge. If that pack is already installed, use its skill.
+
 ## Key Rules
 
 1. **Find the automation first** — `GET /operations-manager/automations?contains=...&containsField=name` shows what's available.
