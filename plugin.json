@@ -1,0 +1,38 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "itential-operator-skills",
+  "version": "0.1.0",
+  "description": "AI agent skills for operating the Itential Platform — find and run automations, monitor jobs, diagnose and retry failures, handle manual approval tasks, and manage endpoint, manual and scheduled triggers.",
+  "author": {
+    "name": "Itential"
+  },
+  "homepage": "https://github.com/itential/operator-skills",
+  "repository": "https://github.com/itential/operator-skills",
+  "license": "GPL-3.0-or-later",
+  "keywords": [
+    "itential",
+    "network-automation",
+    "platform-operations",
+    "jobs",
+    "triggers",
+    "manual-tasks"
+  ],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Itential Operator Skills",
+        "shortDescription": "Operate the Itential Platform: run automations, watch jobs, fix failures",
+        "longDescription": "AI agent skills for operating the Itential Platform — find and run automations, monitor jobs, diagnose and retry failures, handle manual approval tasks, and manage endpoint, manual and scheduled triggers.",
+        "developerName": "Itential",
+        "category": "Automation",
+        "websiteURL": "https://www.itential.com",
+        "defaultPrompt": [
+          "Show me the jobs that failed in the last day and why",
+          "Run the Device Backup automation for IOS-CAT8KV-1",
+          "What manual tasks are waiting for approval?",
+          "Schedule the nightly backup automation to run every 24 hours"
+        ]
+      }
+    }
+  }
+}

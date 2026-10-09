@@ -1,0 +1,23 @@
+{
+  "skill_name": "operator",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "I need to kick off the 'Device Backup - IOS' workflow for device IOS-CAT8KV-1 but I'm not sure what inputs it needs. Can you find the automation, figure out what variables are required, and start the job for me?",
+      "expected_output": "Should find the automation via GET /operations-manager/automations (contains=...&containsField=name), retrieve the inputSchema from Automation Studio with equals[_id]={componentId}, then start the job via POST /operations-manager/jobs/start using the workflow NAME (componentName, not the automation ID) with variables in options.variables.",
+      "files": []
+    },
+    {
+      "id": 1,
+      "prompt": "We've got a bunch of failed jobs from last night's batch run. Can you check what failed, show me the errors, and retry the ones that look like transient network timeouts?",
+      "expected_output": "Should list errored jobs via GET /jobs?equals[status]=error, inspect each job's error array for task-level details, identify network timeout errors, and retry those specific tasks via POST /jobs/{jobId}/tasks/{taskId}/retry.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "There's a manual approval task sitting in the queue for a change request job. I need to review what it's asking for, approve it with a note saying 'Reviewed by ops team - approved for prod', and make sure the job continues.",
+      "expected_output": "Should list waiting manual tasks via GET /operations-manager/tasks?equals[type]=manual&equals[status]=running, claim the task via POST /operations-manager/tasks/{taskId}/claim, read the review controller via GET /operations-manager/jobs/{jobId}/tasks/{taskId}/manual-controller, then finish via POST /operations-manager/jobs/{jobId}/tasks/{taskId}/finish with {taskData: {finish_state: \"success\", variables: {...approval values...}}}.",
+      "files": []
+    }
+  ]
+}

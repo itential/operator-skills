@@ -1,0 +1,19 @@
+{
+  "name": "itential-operator-skills",
+  "description": "AI agent skills for operating the Itential Platform — find and run automations, monitor jobs, diagnose and retry failures, handle manual approval tasks, and manage endpoint, manual and scheduled triggers.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Itential"
+  },
+  "homepage": "https://github.com/itential/operator-skills",
+  "repository": "https://github.com/itential/operator-skills",
+  "license": "GPL-3.0-or-later",
+  "keywords": [
+    "itential",
+    "network-automation",
+    "platform-operations",
+    "jobs",
+    "triggers",
+    "manual-tasks"
+  ]
+}

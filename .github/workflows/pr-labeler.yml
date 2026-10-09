@@ -1,0 +1,67 @@
+name: PR Labeler
+
+# Auto-labels a PR from its branch-name prefix, so Release Drafter (release-drafter.yml)
+# can group the release notes without anyone applying labels by hand.
+#
+# Mapping (see .github/release-drafter.yml and CONTRIBUTING.md):
+#   feature/  -> feature
+#   fix/      -> fix
+#   refactor/ -> refactor
+#   docs/     -> documentation + skip-changelog (left out of release notes)
+#   chore/    -> chore + skip-changelog         (left out of release notes)
+#
+# Uses pull_request_target, not pull_request: the default GITHUB_TOKEN for a
+# fork-triggered `pull_request` event is read-only regardless of the `permissions:`
+# declared below, so labeling a fork PR would fail with "Resource not accessible by
+# integration". `pull_request_target` runs with the base repo's token permissions
+# instead. This is safe here because the job below never checks out the PR's code --
+# it only reads event metadata (PR number, branch name) -- so a fork PR can't get its
+# own code to run with elevated permissions.
+
+on:
+  pull_request_target:
+    types: [opened, reopened, synchronize]
+    branches: [main]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  label-by-branch-prefix:
+    name: Label by branch prefix
+    if: github.repository == 'itential/operator-skills'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Apply label from branch prefix
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
+          BRANCH_NAME: ${{ github.head_ref }}
+        run: |
+          prefix="${BRANCH_NAME%%/*}"
+
+          case "$prefix" in
+            feature)
+              labels="feature"
+              ;;
+            fix)
+              labels="fix"
+              ;;
+            refactor)
+              labels="refactor"
+              ;;
+            docs)
+              labels="documentation,skip-changelog"
+              ;;
+            chore)
+              labels="chore,skip-changelog"
+              ;;
+            *)
+              echo "Branch prefix '$prefix' has no labeler mapping — skipping."
+              exit 0
+              ;;
+          esac
+
+          echo "Applying labels: $labels"
+          gh pr edit "$PR_NUMBER" --repo "$REPO" --add-label "$labels"

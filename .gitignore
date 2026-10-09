@@ -1,0 +1,20 @@
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
+__pycache__/
+*.pyc
+.venv/
+
+# Local credentials and workspaces -- never commit
+.env
+.auth.json
+use-cases/
+
+# =============================================================================
+# Personal skill customization (see docs/customization.md)
+# =============================================================================
+# custom/dev/ is personal by definition -- never commit it to a shared copy.
+# custom/org/ and custom/team/ are meant to be committed in a customer's copy.
+skills/*/custom/dev/*
+!skills/*/custom/dev/.gitkeep

@@ -1,0 +1,47 @@
+name: PR Compliance
+
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+    branches: [main]
+
+jobs:
+  branch-naming:
+    name: Branch Naming
+    if: github.repository == 'itential/operator-skills'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate branch name
+        env:
+          BRANCH_NAME: ${{ github.head_ref }}
+        run: |
+          branch="$BRANCH_NAME"
+          pattern="^(feature|fix|refactor|docs|chore)/[a-z][a-z0-9-]*$"
+          if [[ ! "$branch" =~ $pattern ]]; then
+            echo "::error::Branch '$branch' does not follow naming conventions."
+            echo ""
+            echo "Required format: <type>/<description>"
+            echo "Valid types:     feature, fix, refactor, docs, chore"
+            echo "Description:     lowercase letters, numbers, and hyphens only"
+            echo "Example:         feature/add-auth-middleware"
+            exit 1
+          fi
+          echo "Branch name '$branch' is valid."
+
+  skills-valid:
+    name: Skills Valid
+    if: github.repository == 'itential/operator-skills'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Skills follow the Agent Skills format and their file references resolve
+        run: python3 scripts/check-skills.py
+
+  manifest-versions:
+    name: Manifest Versions
+    if: github.repository == 'itential/operator-skills'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check every plugin manifest carries the same version
+        run: python3 scripts/bump_version.py --check

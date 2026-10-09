@@ -1,0 +1,17 @@
+{
+  "name": "itential-operator-skills",
+  "owner": {
+    "name": "Itential"
+  },
+  "plugins": [
+    {
+      "name": "itential-operator-skills",
+      "source": "./",
+      "description": "Itential Operator Skills — operate the Itential Platform",
+      "version": "0.1.0",
+      "author": {
+        "name": "Itential"
+      }
+    }
+  ]
+}

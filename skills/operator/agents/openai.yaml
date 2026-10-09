@@ -1,0 +1,5 @@
+# Codex skill metadata (display in /skills and the plugin UI).
+interface:
+  display_name: "Platform Operations"
+  short_description: "Run automations, watch jobs, retry failures, approve manual tasks"
+  default_prompt: "Show me the jobs that failed today and why, and retry the ones that hit a timeout"

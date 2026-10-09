@@ -1,0 +1,99 @@
+# Itential — Operator Skills
+
+[![License](https://img.shields.io/badge/License-GPL--3.0-blue.svg)](LICENSE)
+
+AI agent skills for **operating the Itential Platform**: find and run automations, monitor jobs, diagnose and retry failures, approve manual tasks, and manage endpoint, manual and scheduled triggers. Works in Claude Code, Codex CLI, GitHub Copilot (CLI and VS Code) and Cursor.
+
+| Skill | Use it for |
+|---|---|
+| `operator` | Run an automation with the right inputs, check job status, find out why jobs failed and retry the failed task, claim and approve waiting manual tasks, create or pause triggers |
+
+Building or changing workflows is Itential's [builder skills](https://github.com/itential/builder-skills); platform health, adapters, users and access are its [admin skills](https://github.com/itential/admin-skills).
+
+---
+
+## Getting Started
+
+### 1. Install for your tool
+
+| Tool | Install |
+|------|---------|
+| **Claude Code** | `/plugin marketplace add itential/operator-skills` then `/plugin install itential-operator-skills@itential-operator-skills` (same install covers the VS Code extension) |
+| **Codex CLI** | `codex plugin marketplace add itential/operator-skills` then `codex plugin add itential-operator-skills@itential-operator-skills` (same install covers the VS Code extension) |
+| **GitHub Copilot in VS Code** | Command Palette → **Chat: Install Plugin From Source** → `itential/operator-skills` |
+| **GitHub Copilot CLI** | `copilot plugin marketplace add itential/operator-skills` then `copilot plugin install itential-operator-skills@itential-operator-skills` |
+| **Cursor** | `gh skill install itential/operator-skills --agent cursor --all` in your project (or clone the repo and open it) |
+
+How to check it worked, run skills, and update — per tool: [`docs/vendor-install.md`](docs/vendor-install.md).
+
+> **Your org wants its own rules** (naming, change policy, approved roles)? Set up your org's copy first and install from that instead — [`docs/customization.md`](docs/customization.md).
+
+### 2. Connect to your platform
+
+Make a folder to work in, with a `.env` holding your platform credentials:
+
+```bash
+mkdir my-platform && cd my-platform
+cat > .env <<'EOF'
+PLATFORM_URL=https://your-instance.itential.io
+AUTH_METHOD=oauth
+CLIENT_ID=your-client-id
+CLIENT_SECRET=your-client-secret
+EOF
+```
+
+On a local/dev platform with a username and password, use `AUTH_METHOD=password` with `USERNAME=` and `PASSWORD=` instead.
+
+### 3. Verify it's working
+
+Open your tool in that folder and ask:
+
+> "Show me the jobs that failed today and why."
+
+The agent should start the **operator** skill and list failed jobs with the task and error behind each — rather than guessing endpoints. You can also start it directly: `/itential-operator-skills:operator` (Claude Code), `$itential-operator-skills:operator` (Codex), `/operator` (Copilot, Cursor).
+
+### Staying up to date
+
+**Watch → Custom → Releases** on this repo to hear about new versions, then update with your tool's command in [`docs/vendor-install.md`](docs/vendor-install.md). Claude Code updates on its own.
+
+---
+
+## Customization
+
+Don't edit a skill's `SKILL.md` (updates would overwrite it). Each skill has a `custom/` folder for your org's rules:
+
+```
+skills/<skill-name>/
+├── SKILL.md          ← Itential's — never edit
+└── custom/
+    ├── org/          ← company-wide rules
+    ├── team/         ← your team's rules
+    └── dev/          ← personal settings (not committed)
+```
+
+An admin makes a private copy of this repo, the team commits markdown rules under the right skill's `custom/` folder, and everyone installs from the org's copy — the rules come with every install. Step by step: [`docs/customization.md`](docs/customization.md).
+
+---
+
+## Docs
+
+- [`docs/vendor-install.md`](docs/vendor-install.md) — install, run, update per tool
+- [`docs/customization.md`](docs/customization.md) — add your org's rules and keep them across updates
+- [`docs/multi-vendor-architecture.md`](docs/multi-vendor-architecture.md) — how every harness installs from `skills/`, and the CI checks
+- [`AGENTS.md`](AGENTS.md) — the guide every agent reads first
+- [`evals/`](evals/) — test prompts maintainers use to check the skill
+- [`CONTRIBUTING.md`](CONTRIBUTING.md) — how to contribute, PR checks, and releasing
+- [`CHANGELOG.md`](CHANGELOG.md) — what changed in each release
+
+## Contributing
+
+Contributions are welcome! Please read the [Contributing Guide](CONTRIBUTING.md) to get started. Before contributing, you'll need to sign our [Contributor License Agreement](CLA.md). Everyone taking part follows the [Code of Conduct](CODE_OF_CONDUCT.md).
+
+## Support
+
+- **Bug reports and questions**: [Open an issue](https://github.com/itential/operator-skills/issues/new/choose)
+- **Security issues**: see [SECURITY.md](SECURITY.md) — please don't open a public issue
+
+## License
+
+This project is licensed under the GNU General Public License v3.0 — see the [LICENSE](LICENSE) file for details.
