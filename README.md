@@ -1,6 +1,7 @@
 # Itential — Operator Skills
 
 [![License](https://img.shields.io/badge/License-GPL--3.0-blue.svg)](LICENSE)
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/itential/operator-skills/badge)](https://scorecard.dev/viewer/?uri=github.com/itential/operator-skills)
 
 AI agent skills for **operating the Itential Platform**: find and run automations, monitor jobs, diagnose and retry failures, approve manual tasks, and manage endpoint, manual and scheduled triggers. Works in Claude Code, Codex CLI, GitHub Copilot (CLI and VS Code) and Cursor.
 

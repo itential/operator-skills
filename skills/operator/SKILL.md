@@ -1,6 +1,6 @@
 ---
 name: operator
-description: Run automations, monitor jobs, diagnose and retry failures, handle manual approval tasks, and manage triggers on the Itential Platform. Use when you need to find or start a workflow, check job status, see why jobs failed, retry a failed task, approve a waiting manual task, or set up endpoint, manual or scheduled triggers.
+description: Run automations, monitor jobs, diagnose and retry failures, handle manual approval tasks, and manage triggers on the Itential Platform. Use when you need to find or start a workflow, check job status, see why jobs failed, retry a failed task, approve a waiting manual task, or set up endpoint, manual or scheduled triggers. Connects with its own auth helper: never read `.env` or pass credentials to it yourself.
 argument-hint: "[action or workflow-name]"
 ---
 
@@ -21,21 +21,23 @@ rules or put credentials in committed files.
 
 ## Connecting to the Platform
 
-Read `PLATFORM_URL`, `AUTH_METHOD` and the credentials from the `.env` in the folder you're working in. Ask the user only if there's no `.env`. Never print secrets or tokens back to the user.
-
-**OAuth (`AUTH_METHOD=oauth`, `CLIENT_ID`, `CLIENT_SECRET`)** — the usual case, and the only option on SSO-enabled platforms. The request **must** be `application/x-www-form-urlencoded`, not JSON:
+Credentials live in the `.env` of the folder you're working in: `PLATFORM_URL`, plus either `CLIENT_ID` and `CLIENT_SECRET` (an OAuth service account — the usual case, and the only option on SSO-enabled platforms) or `USERNAME` and `PASSWORD` (local or dev platforms). **Never read `.env` yourself** — don't open, `cat`, `source` or print it, and never put a secret or token in a command or a message. Get a token with the auth helper bundled with this skill:
 
 ```bash
-curl -s -X POST "{PLATFORM_URL}/oauth/token" \
-  -H "Content-Type: application/x-www-form-urlencoded" \
-  -d "client_id={CLIENT_ID}&client_secret={CLIENT_SECRET}&grant_type=client_credentials"
+python3 <this skill's folder>/scripts/auth.py .            # reuses a still-valid token, otherwise gets a new one
+python3 <this skill's folder>/scripts/auth.py . --force    # after a 401, or when calls start returning empty responses
 ```
 
-Returns `{"access_token": "...", "token_type": "bearer", "expires_in": 3600}`. Send `Authorization: Bearer {access_token}` on every call.
+It reads `.env`, writes the token to `.auth.json` and a curl config, `.auth.curl` (both readable only by their owner), and prints one status line without any secret. Exit `1`: the platform refused the credentials — show the user the message. Exit `2`: `.env` is missing or incomplete — ask the user to create or fix it; they type the secret into the file, not into the conversation.
 
-**Username/password (`AUTH_METHOD=password`, `USERNAME`, `PASSWORD`)** — local or dev platforms: `POST /login` with `{"username": "...", "password": "..."}` (JSON) returns a token string; pass it as a `?token=` query parameter instead of a header.
+Make every call with the curl config, which sends the token in a header for you — never in the URL, where it ends up in server logs and shell history:
 
-Re-authenticate on a 401, or when calls start returning empty responses mid-session — tokens expire (OAuth: `expires_in` seconds).
+```bash
+curl -s -K .auth.curl "https://<platform>/health/status"
+curl -s -K .auth.curl -X POST -H "Content-Type: application/json" -d @body.json "https://<platform>/operations-manager/jobs/start"
+```
+
+The platform URL is in the helper's status line. Never print, `cat` or echo `.auth.json`, `.auth.curl` or the token. Tokens expire (OAuth: about an hour), so re-run the helper with `--force` on a 401, or when calls start returning empty responses mid-session.
 
 ## Concepts
 
