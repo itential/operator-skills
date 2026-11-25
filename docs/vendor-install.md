@@ -122,7 +122,7 @@ With GitHub CLI 2.90 or later (`gh skill --help` should work), from inside your 
 ```bash
 gh skill install itential/operator-skills --agent github-copilot --all
 ```
-Skills land in the project's `.agents/skills/`. Update by re-running with `--force`; pin a release with `--pin v0.1.0`.
+Skills land in the project's `.agents/skills/`. Update by re-running with `--force`; pin a release with `--pin v0.2.0`.
 </details>
 
 <details><summary>Working from a clone?</summary>
