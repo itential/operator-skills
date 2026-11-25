@@ -48,7 +48,7 @@ If a request belongs to another pack, say which pack covers it and point to that
 
 1. **Read the error message** — Itential errors are specific (`"Missing Params"`, `"No such Method"`, `"Cannot find workflow"`, `"Parameter 'equals' must be used in conjunction with 'equalsField'"`).
 2. **A list returns far more than expected** — the filter was ignored. Check rule 9 for that endpoint's filter style.
-3. **Check `openapi.json`** — fetch it if not local: `curl -s "{BASE}/help/openapi?url={ENCODED_BASE}" -H "Authorization: Bearer {TOKEN}" > openapi.json`. Then search: `jq '.paths["/the/endpoint"]' openapi.json`, and read query parameters with `jq '.paths["/the/endpoint"].get.parameters[].name' openapi.json`.
+3. **Check `openapi.json`** — fetch it if not local: `curl -s -K .auth.curl "{BASE}/help/openapi?url={ENCODED_BASE}" > openapi.json` (`.auth.curl` comes from the operator skill's auth helper — "Connecting to the Platform"). Then search: `jq '.paths["/the/endpoint"]' openapi.json`, and read query parameters with `jq '.paths["/the/endpoint"].get.parameters[].name' openapi.json`.
 4. **Find the body wrapper** — `jq '.paths["/the/endpoint"].post.requestBody.content["application/json"].schema.properties | keys' openapi.json` → the key name is the wrapper.
 5. **If the schema is empty** — check the related POST endpoint for the pattern, or send `{}` and read the `"Missing Params"` response as a last resort.
 6. **Something you expect is missing** — a workflow or automation in a project your account can't see doesn't appear in lists. Ask the project owner to add your account; don't assume it was deleted.
